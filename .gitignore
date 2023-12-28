@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Public files not intended to be bundled with codebase
+public/cores/
+public/roms/
+public/shaders/
+
+# Lock files
+yarn.lock

@@ -1,5 +1,5 @@
 {
-  "name": "emulator-app",
+  "name": "@yourwishes/emu-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,14 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@yourwishes/emu-app-cores": "^1.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "next": "14.0.4",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.4"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/emscripten": "^1.39.10",
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   }
 }
