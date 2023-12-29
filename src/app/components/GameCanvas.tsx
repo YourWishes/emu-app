@@ -1,12 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { RAConfig, RAConfigToFile } from "../utils/RAConfig";
+import { RACore } from "../utils/RACore";
 
 const FS_ROM_DIR = '/rom';
 const FS_ROM_PATH = `${FS_ROM_DIR}/rom.nes`;
 
 export type GameCanvasParams = {
-  core: 'nestopia';
-  rom: string;
+  config:RAConfig;
+  core:RACore;
+  rom:string;
 };
 
 export type GameCanvasModule = EmscriptenModule & {
@@ -79,36 +82,16 @@ export const GameCanvas = (params:GameCanvasParams) => {
             );
 
             // Config
-            console.log('Loading config...');
-            const configRes = await fetch('/retroarch.cfg');
             let path = '/home/web_user/retroarch/userdata';
             mkdirp(path);
             FS.writeFile(
               '/home/web_user/retroarch/userdata/retroarch.cfg',
-              new Uint8Array(await configRes.arrayBuffer())
+              new TextEncoder().encode(RAConfigToFile(params.config))
             );
 
             Module.callMain(Module.arguments);
-            await new Promise(r => setTimeout(r, 100));
-            Module.setCanvasSize(640, 480);
-
-            // Hackery
-            //@ts-ignore
-            (globalThis||global).reloadConfig = async () => {
-              try {
-                const configRes = await fetch('/retroarch.cfg');
-                let path = '/home/web_user/retroarch/userdata';
-                mkdirp(path);
-                FS.writeFile(
-                  '/home/web_user/retroarch/userdata/retroarch.cfg',
-                  new Uint8Array(await configRes.arrayBuffer())
-                );
-                // @ts-ignore
-                Module._cmd_reload_config();
-              } catch(e) {
-                console.error(e);
-              }
-            }
+            // await new Promise(r => setTimeout(r, 100));
+            // Module.setCanvasSize(640, 480);
           } catch(e) {
             console.error('Error during runtime init!!');
             console.error(e);
